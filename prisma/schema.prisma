@@ -1,31 +1,43 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file.
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Defines the generator client - in this case, it's the Prisma Client for JavaScript.
 generator client {
   provider = "prisma-client-js"
 }
 
+// Defines the datasource for the database.
+// This example uses SQLite as the database provider.
+// The database URL is loaded from an environment variable.
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+// Defines the Author model.
+// Represents the authors in the database.
 model Author {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  firstName String
-  lastName String
-  Book Book[]
+  id Int @id @default(autoincrement()) // Unique identifier for each author, auto-increments.
+  createdAt DateTime @default(now())  // Timestamp of when the author is created.
+  updatedAt DateTime @updatedAt       // Timestamp of when the author is last updated.
+  firstName String                    // First name of the author.
+  lastName String                     // Last name of the author.
+  Book Book[]                         // Relation to the Book model. An author can have many books.
 }
 
+// Defines the Book model.
+// Represents the books in the database.
 model Book {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title String
-  isFiction Boolean
-  datePublished DateTime
-  author Author @relation(fields: [authorId],references: [id], onDelete: Cascade)
-  authorId Int
+  id Int @id @default(autoincrement()) // Unique identifier for each book, auto-increments.
+  createdAt DateTime @default(now())  // Timestamp of when the book is created.
+  updatedAt DateTime @updatedAt       // Timestamp of when the book is last updated.
+  title String                        // Title of the book.
+  isFiction Boolean                   // Indicates if the book is fiction or not.
+  datePublished DateTime              // The date the book was published.
+  author Author @relation(fields: [authorId],references: [id], onDelete: Cascade) 
+                                       // Relation to the Author model. 
+                                       // Specifies the field (authorId) for the relation, 
+                                       // references the Author's id, 
+                                       // and on deletion of the author, associated books are also deleted.
+  authorId Int                        // The unique identifier for the related author.
 }
